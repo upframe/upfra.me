@@ -8,6 +8,7 @@
     🕳️
   <script>
   var currentUrl = window.location + ''
+  console.log(window.location)
   if (currentUrl === 'https://upfra.me/') {
     //do nothing, main page
     console.log('Hello developer')
@@ -16,7 +17,8 @@
     var table = {
       '/index.html': 'goodbye'
     }
-    window.location = 'https://connect.upframe.io/' + table[redirect];
+    console.log(table[redirect])
+    //window.location = 'https://connect.upframe.io/' + table[redirect];
   }
   </script>
   </body>

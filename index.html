@@ -7,18 +7,16 @@
   <body>
     🕳️
   <script>
-  var currentUrl = window.location + ''
-  console.log(window.location)
-  if (currentUrl === 'https://upfra.me/') {
-    //do nothing, main page
-    console.log('Hello developer')
+  var currentUrl = window.location.pathname + ''
+  if (currentUrl === '/') {
+    console.log('Hello developers 😎')
   } else {
-    var redirect = currentUrl.split('upfra.me/')[1]
     var table = {
-      '/index.html': 'goodbye'
+      '/malik.piara': 'https://connect.upframe.io/malik.piara',
+      '/ulisses': 'https://ulissesferreira.github.io',
+      '/fabio': 'https://fabiofcferreira.github.io'
     }
-    console.log(table[redirect])
-    //window.location = 'https://connect.upframe.io/' + table[redirect];
+    window.location = table[redirect];
   }
   </script>
   </body>

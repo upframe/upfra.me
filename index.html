@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Upframe Wormhole - Hyperjump in 3... 2... 1...</title>
+  </head>
+  <body>
+    🕳️
+  <script>
+  var currentUrl = window.location + ''
+  if (currentUrl === 'https://upfra.me') {
+    //do nothing, main page
+  } else {
+    var redirect = currentUrl.split('upfra.me/')[1]
+    var table = {
+      '/index.html': 'goodbye'
+    }
+    window.location = 'https://connect.upframe.io/' + table[redirect];
+  }
+  </script>
+  </body>
+</html>

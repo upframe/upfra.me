@@ -7,17 +7,19 @@
   <body>
     🕳️ - The world's simplest URL shortener 🌌😮
   <script>
-    var request = new XMLHttpRequest();
-    request.addEventListener("load", function reqListener() {
-      var response = JSON.parse(this.responseText)
-      if (response.ok === 1 && response.code === 200) {
-        window.location = 'https://connect.upframe.io' + window.location.pathname
-      } else {
-        window.location = 'https://connect.upframe.io/404'
-      }
-    });
-    request.open("GET", "https://api.upframe.io/url/?short=" + window.location.pathname.substr(1));
-    request.send();
+    if ((window.location.pathname + '') !== '/') {
+      var request = new XMLHttpRequest();
+      request.addEventListener("load", function reqListener() {
+        var response = JSON.parse(this.responseText)
+        if (response.ok === 1 && response.code === 200) {
+          window.location = 'https://connect.upframe.io' + window.location.pathname
+        } else {
+          window.location = 'https://connect.upframe.io/404'
+        }
+      });
+      request.open("GET", "https://api.upframe.io/url/?short=" + window.location.pathname.substr(1));
+      request.send();
+    }
   </script>
   </body>
 </html>

@@ -1,0 +1,14 @@
+type CustomPath {
+    shortPath: String!
+    link: String!
+}
+
+type Query {
+    customPath(shortPath: String): CustomPath!
+}
+
+type Mutation {
+    createCustomPath(shortPath: String!, link: String!): CustomPath
+    updateCustomPath(shortPath: String!, link: String!): CustomPath
+    deleteCustomPath(shortPath: String!): CustomPath
+}

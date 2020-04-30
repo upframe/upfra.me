@@ -1,0 +1,29 @@
+service: upframe-url
+provider:
+  name: aws
+  runtime: nodejs12.x
+  region: eu-west-2
+  environment: 
+    PATH_TABLE: CustomPath
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - dynamodb:GetItem
+      Resource: "arn:aws:dynamodb:*:*:table/${self:provider.environment.PATH_TABLE}"
+
+functions:
+  shortener:
+    handler: src/handler.shortener
+    events:
+      - http:
+          path: /{pathname+}
+          cors: true
+          method: get
+          request:
+            parameters:
+              paths:
+                pathname: false
+      - http:
+          path: /
+          method: get
+          cors: true

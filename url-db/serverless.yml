@@ -1,0 +1,30 @@
+service: upframe-customlinks
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  region: eu-west-2
+  environment: 
+    PATH_TABLE: CustomPath
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - dynamodb:GetItem
+      Resource: "arn:aws:dynamodb:*:*:table/${self:provider.environment.PATH_TABLE}"
+
+functions:
+  graphql:
+    handler: handler.server
+    events:
+    - http:
+        path: /
+        method: post
+        cors: true
+        
+  playground:
+    handler: handler.playground
+    events:
+    - http:
+        path: /
+        method: get
+        cors: true

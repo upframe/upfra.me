@@ -3,28 +3,22 @@ service: url-shortener
 provider:
   name: aws
   runtime: nodejs12.x
-  stage: ${opt:stage, 'dev'}
+  stage: ${opt:stage, 'prod'}
   timeout: 20
   region: eu-west-1
-  vpc:
-    securityGroupIds:
-      - ${ssm:/API/SecurityGroup}
-    subnetIds:
-      - ${ssm:/API/Subnet}
-  tracing:
-    apiGateway: true
-    lambda: true
   iamRoleStatements:
-    - Effect: 'Allow'
+    - Effect: Allow
       Action:
-        - 'sns:Publish'
-      Resource:
-        - ${ssm:/email/SNS/arn}
+        - dynamodb:GetItem
+      Resource: !GetAtt redirects.Arn
 
 functions:
   url:
     handler: src/handler.url
     events:
+      - http:
+          path: /
+          method: get
       - http:
           path: /{any+}
           method: get
@@ -35,8 +29,32 @@ functions:
 
 plugins:
   - serverless-offline
+  - serverless-dynamodb-local
 
 custom:
   serverless-offline:
     httpPort: 7000
     noPrependStageInUrl: true
+  dynamodb:
+    stages:
+      - ${self:provider.stage}
+    start:
+      host: localhost
+      port: 8000
+      migrate: true
+
+resources:
+  Resources:
+    redirects:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: redirects
+        AttributeDefinitions:
+          - AttributeName: path
+            AttributeType: S
+        KeySchema:
+          - AttributeName: path
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1

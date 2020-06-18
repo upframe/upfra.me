@@ -1,0 +1,42 @@
+service: url-shortener
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: ${opt:stage, 'dev'}
+  timeout: 20
+  region: eu-west-1
+  vpc:
+    securityGroupIds:
+      - ${ssm:/API/SecurityGroup}
+    subnetIds:
+      - ${ssm:/API/Subnet}
+  tracing:
+    apiGateway: true
+    lambda: true
+  iamRoleStatements:
+    - Effect: 'Allow'
+      Action:
+        - 'sns:Publish'
+      Resource:
+        - ${ssm:/email/SNS/arn}
+
+functions:
+  url:
+    handler: src/handler.url
+    events:
+      - http:
+          path: /{any+}
+          method: get
+
+    environment:
+      REDIRECT_TO: https://upframe.io
+      STAGE: ${self:provider.stage}
+
+plugins:
+  - serverless-offline
+
+custom:
+  serverless-offline:
+    httpPort: 7000
+    noPrependStageInUrl: true

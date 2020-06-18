@@ -1,0 +1,23 @@
+{
+  "name": "upfra.me",
+  "version": "1.0.0",
+  "description": "🕳️ Our awesome url shortener",
+  "main": "index.js",
+  "scripts": {
+    "start:offline": "sls offline --stage offline"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/upframe/upfra.me.git"
+  },
+  "author": "Mathis Bullinger",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/upframe/upfra.me/issues"
+  },
+  "homepage": "https://github.com/upframe/upfra.me#readme",
+  "devDependencies": {
+    "serverless": "^1.73.1",
+    "serverless-offline": "^6.4.0"
+  }
+}

@@ -1,0 +1,60 @@
+service: url-shortener
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: ${opt:stage, 'prod'}
+  timeout: 20
+  region: eu-west-1
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:GetItem
+      Resource: !GetAtt redirects.Arn
+
+functions:
+  url:
+    handler: src/handler.url
+    events:
+      - http:
+          path: /
+          method: get
+      - http:
+          path: /{any+}
+          method: get
+
+    environment:
+      REDIRECT_TO: https://upframe.io
+      STAGE: ${self:provider.stage}
+
+plugins:
+  - serverless-offline
+  - serverless-dynamodb-local
+
+custom:
+  serverless-offline:
+    httpPort: 7000
+    noPrependStageInUrl: true
+  dynamodb:
+    stages:
+      - ${self:provider.stage}
+    start:
+      host: localhost
+      port: 8000
+      migrate: true
+
+resources:
+  Resources:
+    redirects:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: redirects
+        AttributeDefinitions:
+          - AttributeName: path
+            AttributeType: S
+        KeySchema:
+          - AttributeName: path
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1

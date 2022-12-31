@@ -20,7 +20,7 @@
   "homepage": "https://github.com/upframe/upfra.me#readme",
   "devDependencies": {
     "serverless": "^1.73.1",
-    "serverless-dynamodb-local": "^0.2.39",
+    "serverless-dynamodb-local": "^1.0.2",
     "serverless-offline": "^6.4.0"
   }
 }
